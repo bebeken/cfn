@@ -1,0 +1,42 @@
+AWSTemplateFormatVersion: "2010-09-09"
+
+Description: S3 Stack
+
+Parameters:
+  BucketName:
+    Type: String
+
+Resources:
+  S3:
+    Type: "AWS::S3::Bucket"
+    Properties:
+      BucketName: !Ref BucketName
+      # オブジェクト所有者は、の全てのオブジェクトは 『バケットを所有しているアカウント』
+      OwnershipControls:
+        Rules:
+          - ObjectOwnership: BucketOwnerEnforced
+      # 暗号化は、デフォルトのAmazon S3 マネージドキーを使用したサーバー側の暗号化 (SSE-S3)
+      # BucketEncryption:
+        # BucketKeyEnabled: true
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: AES256
+      # パブリックアクセス無効
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+      # バージョニング無効
+      VersioningConfiguration:
+        Status: Suspended
+    DeletionPolicy: Delete
+
+  # S3BucketPolicy:
+
+Outputs:
+  S3:
+    Value: !GetAtt S3.DomainName
+    Export: 
+      Name: S3
