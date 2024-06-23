@@ -1,13 +1,21 @@
 AWSTemplateFormatVersion: '2010-09-09'
 
+Description: CertificateManager Stack
+
 Parameters:
   DomainName:
     Type: String
 
 Resources:
-  MyCertificate:
+  CertificateManager:
     Type: "AWS::CertificateManager::Certificate"
     Properties:
       DomainName: !Ref DomainName
       ValidationMethod: "DNS"
       KeyAlgorithm: RSA_2048
+
+Outputs:
+  CertificateManagerID:
+    Value: !Ref CertificateManager
+    Export: 
+      Name: CertificateManagerID
