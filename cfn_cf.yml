@@ -5,6 +5,8 @@ Description: CloudFront Stack
 Parameters:
   CertificateArn:
     Type: String
+  AlternativeDomainName:
+    Type: String
 
 Resources:
   OAC: 
@@ -23,6 +25,9 @@ Resources:
     Type: AWS::CloudFront::Distribution
     Properties:
       DistributionConfig: 
+        # 代替ドメイン名を指定
+        Aliases:
+          - !Ref AlternativeDomainName
         Origins:
           - DomainName: !ImportValue S3
             Id: S3
